@@ -1,0 +1,24 @@
+{
+	"name": "b13/magnets",
+	"type": "typo3-cms-extension",
+	"description": "Magnets: TYPO3 Service Package revolving around having a good API to fetch the current Geo IP and its location of the user.",
+	"license": "GPL-2.0-or-later",
+	"require": {
+		"typo3/cms-core": "^8.7 || ^9.0",
+		"symfony/process": "^2.8 || ^3.0 || ^4.0",
+		"geoip2/geoip2": "^2.8"
+	},
+	"replace": {
+		"magnets": "self.version"
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "magnets"
+		}
+	},
+	"autoload": {
+		"psr-4": {
+			"B13\\Magnets\\": "Classes/"
+		}
+	}
+}
