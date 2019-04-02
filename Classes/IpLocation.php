@@ -51,12 +51,21 @@ class IpLocation
     /**
      * Get two letter country code.
      *
-     *
      * @return string|false Country code or FALSE on failure
      */
     public function getCountryCode()
     {
         return $this->countryRecord->country->isoCode;
+    }
+
+    /**
+     * Get two letter continent code
+     *
+     * @return string|null
+     */
+    public function getContinentCode()
+    {
+        return $this->countryRecord->continent->code;
     }
 
     /**

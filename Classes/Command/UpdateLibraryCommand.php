@@ -10,6 +10,7 @@ namespace B13\Magnets\Command;
  * of the License, or any later version.
  */
 
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,6 +18,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 /**
  * Updates the GeoIP public databsae from maxmind via Guzzle/curl
@@ -31,18 +33,17 @@ class UpdateLibraryCommand extends Command
      */
     protected $io;
 
+    /**
+     * @var string
+     */
     protected $baseUrl = 'https://geolite.maxmind.com/download/geoip/database/';
 
+    /**
+     * @var array
+     */
     protected $remoteFiles = [
-        'dat' => [
-            'GeoLiteCountry/GeoIP.dat.gz' => 'GeoIP.dat',
-            'GeoIPv6.dat.gz' => 'GeoIPv6.dat',
-            'GeoLiteCity.dat.gz' => 'GeoLiteCity.dat',
-        ],
-        'tar' => [
-            'GeoLite2-City.tar.gz',
-            'GeoLite2-Country.tar.gz',
-        ]
+        'GeoLite2-City.tar.gz',
+        'GeoLite2-Country.tar.gz'
     ];
 
     /**
@@ -70,32 +71,16 @@ class UpdateLibraryCommand extends Command
             GeneralUtility::mkdir_deep($targetPath);
         }
         $requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
-        foreach ($this->remoteFiles as $type => $files) {
-            if ($type === 'dat') {
-                foreach ($files as $file => $targetFile) {
-                    $url = $this->baseUrl . $file;
-                    $targetFile = $targetPath . $targetFile;
-                    $this->io->writeln('Fetching "' . $url . '" to ' . $targetFile);
-                    $response = $requestFactory->request($url);
-                    if ($response->getStatusCode() === 200) {
-                        $content = $response->getBody()->getContents();
-                        GeneralUtility::writeFile($targetFile, gzdecode($content));
-                    }
-                }
-            }
-            if ($type === 'tar') {
-                foreach ($files as $file) {
-                    $url = $this->baseUrl . $file;
-                    $targetFile = $targetPath . $file;
-                    $this->io->writeln('Fetching "' . $url . '" to ' . $targetFile);
-                    $response = $requestFactory->request($url);
-                    if ($response->getStatusCode() === 200) {
-                        GeneralUtility::writeFile($targetFile, $response->getBody()->getContents());
-                        $process = new Process('tar --strip-components=1 -xz --exclude=*txt -f ' . $targetFile, $targetPath);
-                        $process->run();
-                        unlink($targetFile);
-                    }
-                }
+        foreach ($this->remoteFiles as $file) {
+            $url = $this->baseUrl . $file;
+            $targetFile = $targetPath . $file;
+            $this->io->writeln('Fetching "' . $url . '" to ' . $targetFile);
+            $response = $requestFactory->request($url);
+            if ($response->getStatusCode() === 200) {
+                GeneralUtility::writeFile($targetFile, $response->getBody()->getContents());
+                $process = new Process('tar --strip-components=1 -xz --exclude=*txt -f ' . $targetFile, $targetPath);
+                $process->run();
+                unlink($targetFile);
             }
         }
         $this->io->success('Downloaded all files from MaxMind into ' . $targetPath);
