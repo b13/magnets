@@ -10,5 +10,5 @@ if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPPath'])) {
 
 // Define the licence key to access the MaxMind DB files
 if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPLicenceKey'])) {
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPLicenceKey'] = getenv('MAGNETICS_GEO_IP_LICENCE_KEY');
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPLicenceKey'] = getenv('MAGNETS_GEO_IP_LICENCE_KEY');
 }
