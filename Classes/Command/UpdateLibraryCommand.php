@@ -36,14 +36,14 @@ class UpdateLibraryCommand extends Command
     /**
      * @var string
      */
-    protected $baseUrl = 'https://geolite.maxmind.com/download/geoip/database/';
+    protected $baseUrl = 'https://download.maxmind.com/app/geoip_download?suffix=tar.gz';
 
     /**
      * @var array
      */
-    protected $remoteFiles = [
-        'GeoLite2-City.tar.gz',
-        'GeoLite2-Country.tar.gz'
+    protected $remoteEditions = [
+        'GeoLite2-City',
+        'GeoLite2-Country'
     ];
 
     /**
@@ -66,14 +66,20 @@ class UpdateLibraryCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
         $this->io->title($this->getDescription());
 
+        if (empty($GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPLicenceKey'])) {
+            $this->io->error('please provide a licence key, see README.md');
+            return;
+        }
+
         $targetPath = $GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPPath'] . '/';
         if (!file_exists($targetPath)) {
             GeneralUtility::mkdir_deep($targetPath);
         }
+        $this->baseUrl .= '&license_key=' . $GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPLicenceKey'];
         $requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
-        foreach ($this->remoteFiles as $file) {
-            $url = $this->baseUrl . $file;
-            $targetFile = $targetPath . $file;
+        foreach ($this->remoteEditions as $edition) {
+            $url = $this->baseUrl . '&edition_id=' . $edition;
+            $targetFile = $targetPath . $edition . '.tar.gz';
             $this->io->writeln('Fetching "' . $url . '" to ' . $targetFile);
             $response = $requestFactory->request($url);
             if ($response->getStatusCode() === 200) {
