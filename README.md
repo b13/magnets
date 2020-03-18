@@ -1,6 +1,6 @@
 # TYPO3 Extension "magnets"
 
-This extension acts as a thin wrapper for TYPO3 v8/v9 to access GeoIP relevant information.
+This extension acts as a thin wrapper for TYPO3 v8, v9 and v10 to access GeoIP relevant information.
 
 A symfony CLI Command can be added to download the latest GeoIP2 data.
 
@@ -15,8 +15,11 @@ Run `composer req b13/magnets` and install the extension via Extension Manager.
 
 Just as TYPO3 Core, this is an extension for TYPO3 and also licensed under GPL2+.
 
-## Maintainers
+---
 
-Initially created by Benni Mack, maintained by awesome people within [b13 GmbH](https://b13.com), Germany, 2018-2019.
+
+_Made by [b13](https://b13.com) with ♥_
+
+[Find more TYPO3 extensions we have developed](https://b13.com/useful-typo3-extensions-from-b13-to-you) that help us deliver value in client projects. As part of the way we work, we focus on testing and best practices to ensure long-term performance, reliability, and results in all our code.
 
 
