@@ -8,9 +8,6 @@
 		"symfony/process": "^2.8 || ^3.0 || ^4.0",
 		"geoip2/geoip2": "^2.8"
 	},
-	"replace": {
-		"magnets": "self.version"
-	},
 	"extra": {
 		"typo3/cms": {
 			"extension-key": "magnets"
