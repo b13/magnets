@@ -1,0 +1,14 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  B13\Magnets\:
+    resource: '../Classes/*'
+
+  B13\Magnets\Command\UpdateLibraryCommand:
+    tags:
+      - name: 'console.command'
+        command: 'geoip:lib:update'
+        schedulable: true
