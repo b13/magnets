@@ -10,7 +10,6 @@ namespace B13\Magnets\Command;
  * of the License, or any later version.
  */
 
-
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,7 +18,6 @@ use Symfony\Component\Process\Process;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-
 /**
  * Updates the GeoIP public databsae from maxmind via Guzzle/curl
  * and unzips everything in the right place.
@@ -27,7 +25,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class UpdateLibraryCommand extends Command
 {
-
     /**
      * @var SymfonyStyle
      */
@@ -55,11 +52,9 @@ class UpdateLibraryCommand extends Command
     }
 
     /**
-     * Executes the command for importing pages from previous installation
-     *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return int|null|void
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -68,7 +63,7 @@ class UpdateLibraryCommand extends Command
 
         if (empty($GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPLicenceKey'])) {
             $this->io->error('please provide a licence key, see README.md');
-            return;
+            return 1;
         }
 
         $targetPath = $GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPPath'] . '/';
@@ -90,5 +85,6 @@ class UpdateLibraryCommand extends Command
             }
         }
         $this->io->success('Downloaded all files from MaxMind into ' . $targetPath);
+        return 0;
     }
 }
