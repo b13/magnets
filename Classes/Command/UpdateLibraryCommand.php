@@ -79,7 +79,7 @@ class UpdateLibraryCommand extends Command
             $response = $requestFactory->request($url);
             if ($response->getStatusCode() === 200) {
                 GeneralUtility::writeFile($targetFile, $response->getBody()->getContents());
-                $process = new Process('tar --strip-components=1 -xz --exclude=*txt -f ' . $targetFile, $targetPath);
+                $process = new Process(['tar', '--strip-components=1', '-xz', '--exclude=*txt', '-f',  $targetFile], $targetPath);
                 $process->run();
                 unlink($targetFile);
             }
