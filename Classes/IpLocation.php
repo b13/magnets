@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace B13\Magnets;
 
 /*
@@ -19,25 +21,10 @@ use GeoIp2\Database\Reader;
  */
 class IpLocation
 {
-    /**
-     * @var string IP address
-     */
-    protected $ip;
+    protected string $ip;
+    private \GeoIp2\Model\City $cityRecord;
+    private \GeoIp2\Model\Country $countryRecord;
 
-    /**
-     * @var \GeoIp2\Model\City
-     */
-    private $cityRecord;
-
-    /**
-     * @var \GeoIp2\Model\Country
-     */
-    private $countryRecord;
-
-    /**
-     * IpLocation constructor.
-     * @param string $ip
-     */
     public function __construct(string $ip)
     {
         // We could do some nice evaluation if the IP address is valid later-on
@@ -50,34 +37,28 @@ class IpLocation
 
     /**
      * Get two letter country code.
-     *
-     * @return string|false Country code or FALSE on failure
      */
-    public function getCountryCode()
+    public function getCountryCode(): ?string
     {
         return $this->countryRecord->country->isoCode;
     }
 
     /**
      * Get two letter continent code
-     *
-     * @return string|null
      */
-    public function getContinentCode()
+    public function getContinentCode(): ?string
     {
         return $this->countryRecord->continent->code;
     }
 
     /**
      * Get location record.
-     *
-     * @return array|false Location data or FALSE on failure
      */
-    public function getLocation()
+    public function getLocation(): array
     {
         return [
             'lat' => $this->cityRecord->location->latitude,
-            'lng' => $this->cityRecord->location->longitude
+            'lng' => $this->cityRecord->location->longitude,
         ];
     }
 }
