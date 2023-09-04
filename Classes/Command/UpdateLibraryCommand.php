@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace B13\Magnets\Command;
 
 /*
@@ -25,22 +27,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class UpdateLibraryCommand extends Command
 {
-    /**
-     * @var SymfonyStyle
-     */
-    protected $io;
-
-    /**
-     * @var string
-     */
-    protected $baseUrl = 'https://download.maxmind.com/app/geoip_download?suffix=tar.gz';
-
-    /**
-     * @var array
-     */
-    protected $remoteEditions = [
+    protected ?SymfonyStyle $io;
+    protected string $baseUrl = 'https://download.maxmind.com/app/geoip_download?suffix=tar.gz';
+    protected array $remoteEditions = [
         'GeoLite2-City',
-        'GeoLite2-Country'
+        'GeoLite2-Country',
     ];
 
     /**
@@ -51,12 +42,7 @@ class UpdateLibraryCommand extends Command
         $this->setDescription('Updates the MaxMind library files. Should be called at the beginning of each month recurring.');
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return int
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
         $this->io->title($this->getDescription());
@@ -79,7 +65,7 @@ class UpdateLibraryCommand extends Command
             $response = $requestFactory->request($url);
             if ($response->getStatusCode() === 200) {
                 GeneralUtility::writeFile($targetFile, $response->getBody()->getContents());
-                $process = new Process(['tar', '--strip-components=1', '-xz', '--exclude=*txt', '-f',  $targetFile], $targetPath);
+                $process = new Process(['tar', '--strip-components=1', '-xz', '--exclude=*txt', '-f', $targetFile], $targetPath);
                 $process->run();
                 unlink($targetFile);
             }

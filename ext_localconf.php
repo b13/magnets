@@ -1,5 +1,6 @@
 <?php
-defined('TYPO3_MODE') or die();
+
+defined('TYPO3') or die();
 
 // Define the path to the MaxMind DB files
 if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPPath'])) {
