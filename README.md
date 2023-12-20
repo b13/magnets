@@ -23,6 +23,8 @@ In addition, you have "countryCode" as TypoScript condition available.
       page.10.value = You are from france
     [global]
 
+The condition is also available in site configurations.
+
 ## License
 
 Just as TYPO3 Core, this is an extension for TYPO3 and also licensed under GPL2+.
