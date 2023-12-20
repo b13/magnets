@@ -11,6 +11,20 @@ For download the latest GeoIP2 data you have to provide an licence-key from [max
 
 Run `composer req b13/magnets` and install the extension via Extension Manager.
 
+## Usage
+
+Ensure your cronjob / scheduler task is running and use the IpLocation PHP class to have
+a nice and quick API.
+
+In addition, you have "countryCode" as TypoScript condition available.
+
+    [countryCode == 'FR']
+      page.10 = TEXT
+      page.10.value = You are from france
+    [global]
+
+The condition is also available in site configurations.
+
 ## License
 
 Just as TYPO3 Core, this is an extension for TYPO3 and also licensed under GPL2+.

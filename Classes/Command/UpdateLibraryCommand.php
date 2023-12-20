@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace B13\Magnets\Command;
 
 /*
- * This file is part of TYPO3 CMS-based project dbaudio by b13.
+ * This file is part of TYPO3 CMS-based extension "magnets" by b13.
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
@@ -48,8 +48,8 @@ class UpdateLibraryCommand extends Command
         $this->io->title($this->getDescription());
 
         if (empty($GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPLicenceKey'])) {
-            $this->io->error('please provide a licence key, see README.md');
-            return 1;
+            $this->io->error('Provide a licence key, see README.md');
+            return self::FAILURE;
         }
 
         $targetPath = $GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPPath'] . '/';
@@ -71,6 +71,6 @@ class UpdateLibraryCommand extends Command
             }
         }
         $this->io->success('Downloaded all files from MaxMind into ' . $targetPath);
-        return 0;
+        return self::SUCCESS;
     }
 }
