@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace B13\Magnets\Command;
 
 /*
- * This file is part of TYPO3 CMS-based project magnets by b13.
+ * This file is part of TYPO3 CMS-based extension "magnets" by b13.
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2

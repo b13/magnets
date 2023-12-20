@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace B13\Magnets\ExpressionLanguage;
 
 /*
- * This file is part of TYPO3 CMS-based project magnets by b13.
+ * This file is part of TYPO3 CMS-based extension "magnets" by b13.
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
@@ -33,7 +33,7 @@ class GeoIpConditionProvider extends AbstractProvider
 
         // We make the countryCode available in conditions for site configs base variants
         // to enable base URL switches depending on the country code.
-        // e.g. countryCode == 'dk'
+        // e.g. countryCode == 'DK'
         $this->expressionLanguageVariables = [
             'countryCode' => strtoupper($countryCode),
         ];
