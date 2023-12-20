@@ -27,8 +27,12 @@ class GeoIpConditionProvider extends AbstractProvider
         $countryCode = '';
         $ipAddress = GeneralUtility::getIndpEnv('REMOTE_ADDR');
         if ($ipAddress) {
-            $location = new IpLocation($ipAddress);
-            $countryCode = $location->getCountryCode();
+            try {
+                $location = new IpLocation($ipAddress);
+                $countryCode = $location->getCountryCode();
+            } catch (\GeoIp2\Exception\AddressNotFoundException $e) {
+                $countryCode = 'INVALID';
+            }
         }
 
         // We make the countryCode available in conditions for site configs base variants
