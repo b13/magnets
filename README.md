@@ -1,6 +1,6 @@
 # TYPO3 Extension "magnets"
 
-This extension acts as a thin wrapper for TYPO3 v8, v9 and v10 to access GeoIP relevant information.
+This extension acts as a thin wrapper for TYPO3 to access GeoIP relevant information.
 
 A symfony CLI Command can be added to download the latest GeoIP2 data.
 
