@@ -29,7 +29,7 @@ class GeoIpConditionProvider extends AbstractProvider
         if ($ipAddress) {
             try {
                 $location = new IpLocation($ipAddress);
-                $countryCode = $location->getCountryCode();
+                $countryCode = $location->getCountryCode() ?? 'INVALID';
             } catch (\GeoIp2\Exception\AddressNotFoundException $e) {
                 $countryCode = 'INVALID';
             }
