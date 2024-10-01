@@ -21,7 +21,7 @@ use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Updates the GeoIP public databsae from maxmind via Guzzle/curl
+ * Updates the GeoIP public database from maxmind via Guzzle
  * and unzips everything in the right place.
  * Should be a cronjob which runs usually on the first day of the month.
  */
@@ -34,10 +34,7 @@ class UpdateLibraryCommand extends Command
         'GeoLite2-Country',
     ];
 
-    /**
-     * Configure the command by defining the name, options and arguments
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Updates the MaxMind library files. Should be called at the beginning of each month recurring.');
     }
