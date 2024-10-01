@@ -13,6 +13,8 @@ namespace B13\Magnets;
  */
 
 use GeoIp2\Database\Reader;
+use GeoIp2\Model\City;
+use GeoIp2\Model\Country;
 
 /**
  * Fetches Geo Location information from a given IP address
@@ -22,8 +24,8 @@ use GeoIp2\Database\Reader;
 class IpLocation
 {
     protected string $ip;
-    private \GeoIp2\Model\City $cityRecord;
-    private \GeoIp2\Model\Country $countryRecord;
+    private City $cityRecord;
+    private Country $countryRecord;
 
     public function __construct(string $ip)
     {
@@ -35,8 +37,18 @@ class IpLocation
         $this->countryRecord = $reader->country($ip);
     }
 
+    public function getCityRecord(): City
+    {
+        return $this->cityRecord;
+    }
+
+    public function getCountryRecord(): Country
+    {
+        return $this->countryRecord;
+    }
+
     /**
-     * Get two letter country code.
+     * Get two-letter country code.
      */
     public function getCountryCode(): ?string
     {
