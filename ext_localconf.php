@@ -13,3 +13,15 @@ if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPPath'])) {
 if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPLicenceKey'])) {
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPLicenceKey'] = getenv('MAGNETS_GEO_IP_LICENCE_KEY');
 }
+
+if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPSource'])) {
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPSource'] = [];
+}
+
+if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPSource']['url'])) {
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPSource']['url'] = 'https://download.maxmind.com/app/geoip_download?suffix=tar.gz&edition_id=###REMOTE_EDITION###';
+}
+
+if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPSource']['headers'])) {
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPSource']['headers'] = [];
+}

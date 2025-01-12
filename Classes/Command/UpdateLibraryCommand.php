@@ -28,7 +28,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class UpdateLibraryCommand extends Command
 {
     protected ?SymfonyStyle $io;
-    protected string $baseUrl = 'https://download.maxmind.com/app/geoip_download?suffix=tar.gz';
     protected array $remoteEditions = [
         'GeoLite2-City',
         'GeoLite2-Country',
@@ -41,10 +40,12 @@ class UpdateLibraryCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $baseUrl = $GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPSource']['url'];
         $this->io = new SymfonyStyle($input, $output);
         $this->io->title($this->getDescription());
 
-        if (empty($GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPLicenceKey'])) {
+        // Only maxmind requires a License key
+        if (empty($GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPLicenceKey']) && str_starts_with($baseUrl, 'https://download.maxmind.com')) {
             $this->io->error('Provide a licence key, see README.md');
             return self::FAILURE;
         }
@@ -53,15 +54,21 @@ class UpdateLibraryCommand extends Command
         if (!file_exists($targetPath)) {
             GeneralUtility::mkdir_deep($targetPath);
         }
-        $this->baseUrl .= '&license_key=' . $GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPLicenceKey'];
+        if(!empty($GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPLicenceKey'])) {
+            $baseUrl .= '&license_key=' . $GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPLicenceKey'];
+        }
+
         $requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
         foreach ($this->remoteEditions as $edition) {
-            $url = $this->baseUrl . '&edition_id=' . $edition;
+            $url = str_replace('###REMOTE_EDITION###', $edition, $baseUrl);
             $targetFile = $targetPath . $edition . '.tar.gz';
             $this->io->writeln('Fetching "' . $url . '" to ' . $targetFile);
-            $response = $requestFactory->request($url);
-            if ($response->getStatusCode() === 200) {
-                GeneralUtility::writeFile($targetFile, $response->getBody()->getContents());
+            $request = $requestFactory->request($url, 'GET', [
+                'headers' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPSource']['headers'],
+            ]);
+
+            if ($request->getStatusCode() === 200) {
+                GeneralUtility::writeFile($targetFile, $request->getBody()->getContents());
                 $process = new Process(['tar', '--strip-components=1', '-xz', '--exclude=*txt', '-f', $targetFile], $targetPath);
                 $process->run();
                 unlink($targetFile);
