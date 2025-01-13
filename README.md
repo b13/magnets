@@ -8,7 +8,7 @@ For download the latest GeoIP2 data you have to provide an licence-key from [max
 (as .env-Variable or `$GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPLicenceKey']`)
 
 Maxmind API requests are limited (1000 requests/day). As an alternative the databases
-(GeoLite2-City, GeoLite2-Country) can be stores as a "Generic Package" in GitLab.
+(GeoLite2-City, GeoLite2-Country) can be stored as a "Generic Package" in GitLab.
 
 For Download during the CI run the `CI_JOB_TOKEN` can be used as follows:
 ```php
@@ -37,6 +37,23 @@ In addition, you have "countryCode" as TypoScript condition available.
     [global]
 
 The condition is also available in site configurations.
+
+## Settings
+
+Headers to send while running the request to download the database.
+Either use `JOB-TOKEN` or `PRIVATE-TOKEN` to [authenticate on GitLab](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html).
+
+```php
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPSource']['headers'] = [];
+```
+
+Change the URL to retrieve the databases from.
+The URL needs to include `###REMOTE_EDITION###` which will be replaced by
+the "remote edition" (GeoLite2-Country and GeoLite2-City).
+
+```php
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPSource']['url'] = 'https://download.maxmind.com/app/geoip_download?suffix=tar.gz&edition_id=###REMOTE_EDITION###';
+```
 
 ## Store and Update databases using GitLab
 
