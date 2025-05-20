@@ -12,6 +12,7 @@ namespace B13\Magnets\Command;
  * of the License, or any later version.
  */
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -25,6 +26,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * and unzips everything in the right place.
  * Should be a cronjob which runs usually on the first day of the month.
  */
+#[AsCommand(name: 'geoip:lib:update')]
 class UpdateLibraryCommand extends Command
 {
     protected ?SymfonyStyle $io;
@@ -54,7 +56,7 @@ class UpdateLibraryCommand extends Command
         if (!file_exists($targetPath)) {
             GeneralUtility::mkdir_deep($targetPath);
         }
-        if(!empty($GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPLicenceKey'])) {
+        if (!empty($GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPLicenceKey'])) {
             $baseUrl .= '&license_key=' . $GLOBALS['TYPO3_CONF_VARS']['SYS']['GeoIPLicenceKey'];
         }
 
