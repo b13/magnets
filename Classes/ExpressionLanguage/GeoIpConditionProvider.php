@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace B13\Magnets\ExpressionLanguage;
 
@@ -12,9 +13,10 @@ namespace B13\Magnets\ExpressionLanguage;
  */
 
 use B13\Magnets\IpLocation;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\ExpressionLanguage\AbstractProvider;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Http\NormalizedParams;
 
 class GeoIpConditionProvider extends AbstractProvider
 {
@@ -25,8 +27,8 @@ class GeoIpConditionProvider extends AbstractProvider
         }
 
         $countryCode = '';
-        $ipAddress = GeneralUtility::getIndpEnv('REMOTE_ADDR');
-        if ($ipAddress) {
+        $ipAddress = $this->getIpAddress();
+        if ($ipAddress !== null) {
             try {
                 $location = new IpLocation($ipAddress);
                 $countryCode = $location->getCountryCode() ?? 'INVALID';
@@ -41,5 +43,20 @@ class GeoIpConditionProvider extends AbstractProvider
         $this->expressionLanguageVariables = [
             'countryCode' => strtoupper($countryCode),
         ];
+    }
+
+    protected function getIpAddress(): ?string
+    {
+        /** @var ?ServerRequestInterface $request */
+        $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
+        if ($request === null) {
+            return null;
+        }
+        /** @var ?NormalizedParams $normalizedParams */
+        $normalizedParams = $request->getAttribute('normalizedParams');
+        if ($normalizedParams === null) {
+            return null;
+        }
+        return $normalizedParams->getRemoteAddress();
     }
 }
