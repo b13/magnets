@@ -71,8 +71,32 @@ class UpdateLibraryCommand extends Command
 
             if ($request->getStatusCode() === 200) {
                 GeneralUtility::writeFile($targetFile, $request->getBody()->getContents());
-                $process = new Process(['tar', '--strip-components=1', '-xz', '--exclude=*txt', '-f', $targetFile], $targetPath);
+
+                $tmpDir = $targetPath . $edition . '_tmp_' . uniqid('', true);
+                GeneralUtility::mkdir_deep($tmpDir);
+
+                $process = new Process(['tar', '--strip-components=1', '-xz', '--exclude=*txt', '-f', $targetFile, '-C', $tmpDir], $targetPath);
                 $process->run();
+
+                if (!$process->isSuccessful()) {
+                    GeneralUtility::rmdir($tmpDir, true);
+                    unlink($targetFile);
+                    $this->io->error('Failed to extract ' . $targetFile . ': ' . $process->getErrorOutput());
+                    continue;
+                }
+
+                $extractedMmdbFile = $tmpDir . '/' . $edition . '.mmdb';
+                $finalMmdbFile = $targetPath . $edition . '.mmdb';
+
+                if (file_exists($extractedMmdbFile)) {
+                    if (!rename($extractedMmdbFile, $finalMmdbFile)) {
+                        $this->io->error('Failed to move extracted file ' . $extractedMmdbFile . ' to ' . $finalMmdbFile);
+                    }
+                } else {
+                    $this->io->warning('Could not find expected file ' . $edition . '.mmdb in the extracted archive.');
+                }
+
+                GeneralUtility::rmdir($tmpDir, true);
                 unlink($targetFile);
             }
         }
