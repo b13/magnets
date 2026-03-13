@@ -4,7 +4,7 @@
 	"description": "Magnets: TYPO3 Service Package revolving around having a good API to fetch the current Geo IP and its location of the user.",
 	"license": "GPL-2.0-or-later",
 	"require": {
-		"typo3/cms-core": "^12.4 || ^13.4",
+		"typo3/cms-core": "^12 || ^13 || ^14",
 		"geoip2/geoip2": "^3"
 	},
 	"extra": {
@@ -16,5 +16,16 @@
 		"psr-4": {
 			"B13\\Magnets\\": "Classes/"
 		}
+	},
+	"config": {
+		"allow-plugins": {
+			"typo3/cms-composer-installers": true,
+			"typo3/class-alias-loader": true
+		}
+	},
+	"require-dev": {
+		"typo3/coding-standards": "^0.8.0",
+		"saschaegerer/phpstan-typo3": "^3.0",
+		"phpstan/phpstan": "^2.1"
 	}
 }
